@@ -5618,6 +5618,38 @@ GroundingMetadataSourceFlaggingUriOrDict = Union[
 ]
 
 
+class YoutubeVideo(_common.BaseModel):
+  """Youtube video for the response."""
+
+  youtube_external_id: Optional[str] = Field(
+      default=None, description="""External ID of the youtube video."""
+  )
+  
+class YoutubeVideoDict(TypedDict, total=False):
+  """Youtube video for the response."""
+
+  youtube_external_id: Optional[str]
+  """External ID of the youtube video."""
+
+YoutubeVideoOrDict = Union[YoutubeVideo, YoutubeVideoDict]
+
+class Attachment(_common.BaseModel):
+  """Attachment for the response."""
+
+  youtube_video: Optional[YoutubeVideo] = Field(
+      default=None,
+      description="""Youtube video for the response.""",
+  )
+  
+class AttachmentDict(TypedDict, total=False):
+  """Attachment for the response."""
+
+  youtube_video: Optional[YoutubeVideoDict]
+  """Youtube video for the response."""
+
+AttachmentOrDict = Union[Attachment, AttachmentDict]
+
+
 class GroundingMetadata(_common.BaseModel):
   """Metadata returned to client when grounding is enabled."""
 
@@ -5653,6 +5685,10 @@ class GroundingMetadata(_common.BaseModel):
       default=None,
       description="""Optional. Web search queries for the following-up web search.""",
   )
+  attachments: Optional[list[Attachment]] = Field(
+      default=None,
+      description="""Optional. Attachments for the response.""",
+  )
 
 
 class GroundingMetadataDict(TypedDict, total=False):
@@ -5681,6 +5717,9 @@ class GroundingMetadataDict(TypedDict, total=False):
 
   web_search_queries: Optional[list[str]]
   """Optional. Web search queries for the following-up web search."""
+
+  attachments: Optional[list[AttachmentDict]]
+  """Optional. Attachments for the response."""
 
 
 GroundingMetadataOrDict = Union[GroundingMetadata, GroundingMetadataDict]
